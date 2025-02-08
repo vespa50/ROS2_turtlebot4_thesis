@@ -1,0 +1,37 @@
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+
+
+ros2 action send_goal /drive_distance irobot_create_msgs/action/DriveDistance \"distance: 0.5 max_translation_speed: 0.3"
+
+ros2 launch turtlebot4_navigation slam.launch.py
+
+ros2 launch turtlebot4_viz view_robot.launch.py
+
+ros2 pkg create turtlebot_path_follower --build-type ament_python --dependencies rclpy
+
+wget -qO - https://raw.githubusercontent.com/turtlebot/turtlebot4_setup/humble/turtlebot4_discovery/configure_discovery.sh | bash <(cat) </dev/tty
+
+
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+ros2 launch turtlebot4_navigation slam.launch.py
+ros2 launch turtlebot4_viz view_robot.launch.py
+ros2 topic echo /battery_state
+
+ros2 launch turtlebot4_navigation localization.launch.py map:=office.yaml
+ros2 launch turtlebot4_navigation nav2.launch.py
+ros2 run turtlebot_path_follower patrol_loop
+
+ros2 action send_goal /dock irobot_create_msgs/action/Dock {}
+ros2 action send_goal /undock irobot_create_msgs/action/Undock {}
+ros2 action send_goal /drive_arc irobot_create_msgs/action/DriveArc "{angle: 1.57,radius: 0.3,translate_direction: 1,max_translation_speed: 0.3}"
+ros2 action send_goal /drive_distance irobot_create_msgs/action/DriveDistance "{distance: 0.5,max_translation_speed: 0.15}"
+ros2 action send_goal /navigate_to_position irobot_create_msgs/action/NavigateToPosition "{achieve_goal_heading: true,goal_pose:{pose:{position:{x: 1,y: 0.2,z: 0.0}, orientation:{x: 0.0,y: 0.0, z: 0.0, w: 1.0}}}}"
+ros2 action send_goal /rotate_angle irobot_create_msgs/action/RotateAngle "{angle: 1.57,max_rotation_speed: 0.5}"
+
+/opt/ros/humble/local/lib/python3.10/dist-packages/turtlebot4_navigation/turtlebot4_navigator.py
+/opt/ros/humble/lib/python3.10/site-packages/nav2_simple_commander/robot_navigator.py
+
+cd ~/myTURTLEcontrol_ws
+ros2 run turtlebot_path_follower patrol_loop
+
+

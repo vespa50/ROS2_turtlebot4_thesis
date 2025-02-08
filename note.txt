@@ -1,0 +1,6 @@
+ip rasberry 180.168.1.103 
+passwoer wifi wcln2024
+
+
+
+
